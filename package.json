@@ -1,12 +1,17 @@
 {
   "name": "geobuk-shared",
   "version": "1.0.0",
-  "description": "",
-  "main": "dist/index.js",
+  "type": "module",
+  "description": "거북스쿨 공용 라이브러리 (Utils, Auth, SSO)",
+  "main": "dist/utils/index.js",
   "exports": {
     "./utils": {
       "types": "./dist/utils/index.d.ts",
       "default": "./dist/utils/index.js"
+    },
+    "./auth": {
+      "types": "./dist/auth/index.d.ts",
+      "default": "./dist/auth/index.js"
     }
   },
   "scripts": {
@@ -16,11 +21,18 @@
   "author": "withjoono",
   "license": "ISC",
   "devDependencies": {
+    "@types/humps": "^2.0.6",
+    "axios": "^1.8.4",
+    "humps": "^2.0.1",
     "typescript": "^5.0.0"
   },
   "dependencies": {
+    "axios": ">=1.0.0",
     "clsx": "^2.1.1",
+    "humps": "^2.0.1",
     "tailwind-merge": "^2.3.0"
   },
-  "type": "module"
+  "peerDependencies": {
+    "axios": ">=1.0.0"
+  }
 }

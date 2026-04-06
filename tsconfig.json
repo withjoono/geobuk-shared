@@ -1,23 +1,15 @@
 {
   "compilerOptions": {
-    "outDir": "./dist",
-    "module": "nodenext",
-    "target": "es2022",
-    "types": [],
-    "sourceMap": true,
+    "target": "ES2022",
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext",
     "declaration": true,
-    "declarationMap": true,
-    "noUncheckedIndexedAccess": true,
-    "exactOptionalPropertyTypes": true,
+    "outDir": "./dist",
+    "rootDir": "./src",
     "strict": true,
-    "jsx": "react-jsx",
-    "verbatimModuleSyntax": true,
-    "isolatedModules": true,
-    "noUncheckedSideEffectImports": true,
-    "moduleDetection": "force",
-    "skipLibCheck": true,
-    "moduleResolution": "nodenext",
     "esModuleInterop": true,
-    "rootDir": "./src"
-  }
+    "skipLibCheck": true,
+    "types": []
+  },
+  "include": ["src"]
 }

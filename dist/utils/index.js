@@ -28,4 +28,3 @@ export const getRiskText = (risk) => {
             return "💀 결격(-5단계)";
     }
 };
-//# sourceMappingURL=index.js.map
