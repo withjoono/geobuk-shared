@@ -1,8 +1,12 @@
 {
   "name": "@withjoono/geobuk-shared",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "type": "module",
   "description": "거북스쿨 공용 라이브러리 (Utils, Auth, SSO)",
+  "files": [
+    "dist",
+    "tailwind-preset.js"
+  ],
   "repository": {
     "type": "git",
     "url": "https://github.com/withjoono/geobuk-shared.git"
