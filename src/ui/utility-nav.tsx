@@ -1,25 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Bell, Users, LogOut, ChevronDown } from 'lucide-react';
+import { BellRing, Link2, LogOut, ChevronDown, CreditCard } from 'lucide-react';
 import { AcornIcon } from './icons/acorn-icon.js';
-
-function WonCircle(props: React.SVGProps<SVGSVGElement>) {
-  return (
-    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}>
-      <circle cx="12" cy="12" r="10" />
-      <text
-        x="12"
-        y="16"
-        textAnchor="middle"
-        fontSize="12"
-        fontWeight="bold"
-        fill="currentColor"
-        stroke="none"
-      >
-        ₩
-      </text>
-    </svg>
-  );
-}
 
 // 아바타 렌더러
 function DefaultAvatar({ fallback }: { fallback: string }) {
@@ -126,7 +107,7 @@ export function UtilityNav({
             className={buttonClass}
             title="내 도토리 잔액 확인"
           >
-            <AcornIcon className="h-5 w-5" />
+            <AcornIcon size={20} color="currentColor" />
           </button>
           
           {acornOpen && (
@@ -143,17 +124,17 @@ export function UtilityNav({
 
       {/* 2. 결제 */}
       <LinkComponent href={urls.products} to={urls.products} className={buttonClass} title="이용권 구매">
-        <WonCircle className="h-5 w-5" />
+        <CreditCard className="h-5 w-5" />
       </LinkComponent>
 
       {/* 3. 알림 */}
       <LinkComponent href={urls.notifications} to={urls.notifications} className={`${buttonClass} relative`} title="알림">
-        <Bell className="h-5 w-5" />
+        <BellRing className="h-5 w-5" />
       </LinkComponent>
 
       {/* 4. 계정연동 */}
       <LinkComponent href={urls.accountLinkage} to={urls.accountLinkage} className={buttonClass} title="계정연동">
-        <Users className="h-5 w-5" />
+        <Link2 className="h-5 w-5" />
       </LinkComponent>
 
       {/* 5. 로그인 / 유저프로필 */}
