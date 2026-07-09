@@ -1,6 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { BellRing, Link2, LogOut, ChevronDown, CreditCard } from 'lucide-react';
+import { BellRing, Users, LogOut, ChevronDown } from 'lucide-react';
 import { AcornIcon } from './icons/acorn-icon.js';
+import { WonCircleIcon } from './icons/won-circle-icon.js';
 
 // 아바타 렌더러
 function DefaultAvatar({ fallback }: { fallback: string }) {
@@ -101,9 +102,14 @@ export function UtilityNav({
     <div className="flex items-center gap-1">
       {/* 1. 도토리 */}
       {isLoggedIn && (
-        <div className="relative" ref={acornRef}>
+        <div
+          className="relative"
+          ref={acornRef}
+          onMouseEnter={() => setAcornOpen(true)}
+          onMouseLeave={() => setAcornOpen(false)}
+        >
           <button
-            onClick={() => setAcornOpen(!acornOpen)}
+            onClick={() => setAcornOpen((v) => !v)}
             className={buttonClass}
             title="내 도토리 잔액 확인"
           >
@@ -122,9 +128,9 @@ export function UtilityNav({
         </div>
       )}
 
-      {/* 2. 결제 */}
+      {/* 2. 결제 — 동그라미 안 원(₩) */}
       <LinkComponent href={urls.products} to={urls.products} className={buttonClass} title="이용권 구매">
-        <CreditCard className="h-5 w-5" />
+        <WonCircleIcon className="h-5 w-5" />
       </LinkComponent>
 
       {/* 3. 알림 */}
@@ -132,9 +138,9 @@ export function UtilityNav({
         <BellRing className="h-5 w-5" />
       </LinkComponent>
 
-      {/* 4. 계정연동 */}
+      {/* 4. 계정연동 — 사람 둘 겹침 */}
       <LinkComponent href={urls.accountLinkage} to={urls.accountLinkage} className={buttonClass} title="계정연동">
-        <Link2 className="h-5 w-5" />
+        <Users className="h-5 w-5" />
       </LinkComponent>
 
       {/* 5. 로그인 / 유저프로필 */}
