@@ -33,9 +33,9 @@ export function EcosystemHeader({
   children,
 }: EcosystemHeaderProps) {
   return (
-    <header className="sticky top-0 z-40 w-full bg-white">
+    <header className="sticky top-0 z-40 w-full bg-white shadow-sm">
       {/* 윗줄: 생태계 바 (T스쿨 이동 + UtilityNav) */}
-      <div className="flex items-center gap-2 border-b border-gray-100 bg-gray-50 px-4 py-1 text-xs">
+      <div className="flex items-center gap-2 border-b border-gray-200 bg-gray-100 px-4 py-1 text-xs">
         <a
           href={hubUrl}
           className="flex items-center gap-1 font-medium text-gray-600 hover:text-gray-900"
