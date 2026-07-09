@@ -3,76 +3,53 @@ import { LayoutGrid } from 'lucide-react';
 import { UtilityNav, type UtilityNavProps } from './utility-nav.js';
 
 /**
- * 2단 생태계 헤더 (거북스쿨 위성앱 공용).
+ * 2단 생태계 헤더 (거북스쿨 위성앱 공용) — 유연한 shell.
  *
  *  ┌───────────────────────────────────────────────┐
- *  │ [⊞ T스쿨]                       < UtilityNav > │  ← 윗줄: 생태계/유틸 (모든 앱 공통)
+ *  │ [⊞ T스쿨]                       < UtilityNav > │  ← 윗줄: 생태계/유틸 (모든 앱 공통 · shell 제공)
  *  ├───────────────────────────────────────────────┤
- *  │ [로고 앱이름]  메뉴A  메뉴B  메뉴C …           │  ← 아랫줄: 앱 고유 네비 (앱이 주입)
+ *  │  (앱이 기존 헤더 콘텐츠를 children 으로 그대로) │  ← 아랫줄: 앱 고유 (로고·네비·모바일메뉴 등)
  *  └───────────────────────────────────────────────┘
  *
- * - 윗줄 오른쪽은 기존 `UtilityNav` 를 그대로 재사용(도토리/결제/알림/계정/유저).
- * - 아랫줄 메뉴는 앱마다 다르므로 `children` 으로 주입(각 앱의 <a>/<Link>).
- * - 프레임워크 독립: 앱 홈 링크는 `LinkComponent`(주입) 사용, 티스쿨 이동은 절대경로 <a>.
+ * 표준화 지점은 "윗줄"뿐: T스쿨 이동 + 기존 `UtilityNav`(도토리/결제/알림/계정/유저) 재사용.
+ * 아랫줄은 앱마다 헤더가 제각각(드롭다운·모바일 Sheet 등)이라 `children` 으로 그대로 감싼다.
+ * → 마이그레이션: 앱의 기존 `<header>` 를 이 컴포넌트로 감싸고, 그 안에서 UtilityNav 만 utility 로 끌어올린다.
  */
 export interface EcosystemHeaderProps {
-  /** 앱 이름. 예: 'T수시' */
-  appName: string;
-  /** 앱 로고 (이미지 노드 등). 생략 가능 */
-  appLogo?: React.ReactNode;
-  /** 앱 홈 경로. 기본 '/' */
-  homeUrl?: string;
-  /** 라우터 Link 주입(TanStack/Next 등). 기본 'a' */
-  LinkComponent?: React.ElementType;
-  /** 티스쿨 메인 URL. 기본 https://www.tskool.kr */
+  /** T스쿨 메인 URL. 기본 https://www.tskool.kr */
   hubUrl?: string;
+  /** 좌상단 라벨. 기본 'T스쿨' */
+  hubLabel?: string;
   /** 윗줄 오른쪽 유틸 묶음(UtilityNav)으로 그대로 전달 */
   utility: UtilityNavProps;
-  /** 아랫줄 앱 고유 메뉴 — 앱이 <a>/<Link> 로 주입 */
-  children?: React.ReactNode;
+  /** 아랫줄: 앱 고유 헤더 콘텐츠(로고/네비/모바일메뉴 등)를 그대로 주입 */
+  children: React.ReactNode;
 }
 
 export function EcosystemHeader({
-  appName,
-  appLogo,
-  homeUrl = '/',
-  LinkComponent = 'a',
   hubUrl = 'https://www.tskool.kr',
+  hubLabel = 'T스쿨',
   utility,
   children,
 }: EcosystemHeaderProps) {
-  const Link = LinkComponent;
-
   return (
     <header className="sticky top-0 z-40 w-full bg-white">
-      {/* 윗줄: 생태계 바 (티스쿨 이동 + UtilityNav) */}
+      {/* 윗줄: 생태계 바 (T스쿨 이동 + UtilityNav) */}
       <div className="flex items-center gap-2 border-b border-gray-100 bg-gray-50 px-4 py-1 text-xs">
         <a
           href={hubUrl}
           className="flex items-center gap-1 font-medium text-gray-600 hover:text-gray-900"
-          title="티스쿨 메인으로"
+          title="T스쿨 메인으로"
         >
           <LayoutGrid className="h-4 w-4" />
-          <span>T스쿨</span>
+          <span>{hubLabel}</span>
         </a>
         <div className="flex-1" />
         <UtilityNav {...utility} />
       </div>
 
-      {/* 아랫줄: 앱 고유 네비 */}
-      <div className="flex h-12 items-center gap-5 border-b border-gray-200 px-4">
-        <Link
-          href={homeUrl}
-          to={homeUrl}
-          className="flex shrink-0 items-center gap-2 font-medium text-gray-900"
-        >
-          {appLogo}
-          <span>{appName}</span>
-        </Link>
-        <nav className="flex items-center gap-4 overflow-x-auto text-sm text-gray-600">
-          {children}
-        </nav>
-      </div>
+      {/* 아랫줄: 앱 고유 헤더 (앱이 주입) */}
+      <div className="border-b border-gray-200">{children}</div>
     </header>
   );
 }
