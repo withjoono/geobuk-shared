@@ -4,14 +4,14 @@ import { AcornIcon } from './icons/acorn-icon.js';
 import { WonCircleIcon } from './icons/won-circle-icon.js';
 
 // 아바타 렌더러
-function DefaultAvatar({ fallback }: { fallback: string }) {
+function DefaultAvatar({ fallback, size = 28 }: { fallback: string; size?: number }) {
   return (
     <div style={{
       display: 'flex',
       alignItems: 'center',
       justifyContent: 'center',
-      width: '28px',
-      height: '28px',
+      width: `${size}px`,
+      height: `${size}px`,
       borderRadius: '50%',
       backgroundColor: '#f3f4f6',
       color: '#4b5563',
@@ -43,7 +43,9 @@ export interface UtilityNavProps {
   onLogout?: (e?: React.MouseEvent) => void;
   // 디자인 테마
   isScrolled?: boolean;
-  
+  /** 얇은 상단바용 컴팩트 모드: 아이콘/버튼 작게 + 로그인은 배경·pill 없는 텍스트 링크 */
+  compact?: boolean;
+
   // Link URL 설정
   urls?: {
     products?: string;
@@ -63,6 +65,7 @@ export function UtilityNav({
   LinkComponent = 'a',
   onLogout,
   isScrolled = true,
+  compact = false,
   urls = {
     products: '/products',
     notifications: '/notifications',
@@ -75,7 +78,7 @@ export function UtilityNav({
 }: UtilityNavProps) {
   const [acornOpen, setAcornOpen] = useState(false);
   const [userMenuOpen, setUserMenuOpen] = useState(false);
-  
+
   const acornRef = useRef<HTMLDivElement>(null);
   const userMenuRef = useRef<HTMLDivElement>(null);
 
@@ -92,7 +95,12 @@ export function UtilityNav({
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
-  const buttonClass = `inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors hover:bg-black/5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 h-10 w-10 ${
+  // 컴팩트(상단바)면 아이콘/버튼을 작게
+  const btnSize = compact ? 'h-8 w-8' : 'h-10 w-10';
+  const iconClass = compact ? 'h-[18px] w-[18px]' : 'h-5 w-5';
+  const acornSize = compact ? 18 : 20;
+
+  const buttonClass = `inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors hover:bg-black/5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 ${btnSize} ${
     isScrolled ? 'text-gray-600 hover:bg-gray-100 hover:text-gray-900' : 'text-white/90 hover:bg-white/10'
   }`;
 
@@ -113,9 +121,9 @@ export function UtilityNav({
             className={buttonClass}
             title="내 도토리 잔액 확인"
           >
-            <AcornIcon size={20} color="currentColor" />
+            <AcornIcon size={acornSize} color="currentColor" />
           </button>
-          
+
           {acornOpen && (
             <div className="absolute right-0 mt-2 w-48 rounded-md bg-white p-4 shadow-lg ring-1 ring-black ring-opacity-5 z-50">
               <div className="text-sm text-gray-500 font-medium">내 도토리 잔액</div>
@@ -130,17 +138,17 @@ export function UtilityNav({
 
       {/* 2. 결제 — 동그라미 안 원(₩) */}
       <LinkComponent href={urls.products} to={urls.products} className={buttonClass} title="이용권 구매">
-        <WonCircleIcon className="h-5 w-5" />
+        <WonCircleIcon className={iconClass} />
       </LinkComponent>
 
       {/* 3. 알림 */}
       <LinkComponent href={urls.notifications} to={urls.notifications} className={`${buttonClass} relative`} title="알림">
-        <BellRing className="h-5 w-5" />
+        <BellRing className={iconClass} />
       </LinkComponent>
 
       {/* 4. 계정연동 — 사람 둘 겹침 */}
       <LinkComponent href={urls.accountLinkage} to={urls.accountLinkage} className={buttonClass} title="계정연동">
-        <Users className="h-5 w-5" />
+        <Users className={iconClass} />
       </LinkComponent>
 
       {/* 5. 로그인 / 유저프로필 */}
@@ -148,14 +156,14 @@ export function UtilityNav({
         <div className="relative ml-1" ref={userMenuRef}>
           <button
             onClick={() => setUserMenuOpen(!userMenuOpen)}
-            className={`flex items-center gap-2 px-3 py-2 h-10 rounded-md transition-colors ${
+            className={`flex items-center gap-2 px-2 ${compact ? 'py-1 h-8' : 'py-2 h-10'} rounded-md transition-colors ${
               isScrolled ? 'text-gray-900 hover:bg-gray-100' : 'text-white hover:bg-white/10'
             }`}
           >
             {user.profileImage ? (
-              <img src={user.profileImage} alt="profile" className="h-7 w-7 rounded-full object-cover" />
+              <img src={user.profileImage} alt="profile" className={`${compact ? 'h-6 w-6' : 'h-7 w-7'} rounded-full object-cover`} />
             ) : (
-              <DefaultAvatar fallback={user.nickname?.[0] || '?'} />
+              <DefaultAvatar fallback={user.nickname?.[0] || '?'} size={compact ? 24 : 28} />
             )}
             <span className="text-sm font-medium">{user.nickname}</span>
             {user.is_ranker && (
@@ -193,6 +201,25 @@ export function UtilityNav({
             </div>
           )}
         </div>
+      ) : compact ? (
+        // 컴팩트: 배경·pill 없는 텍스트 링크
+        <LinkComponent
+          href={urls.login}
+          to={urls.login}
+          style={{
+            display: 'inline-flex',
+            alignItems: 'center',
+            padding: '0 8px',
+            height: '32px',
+            color: isScrolled ? '#374151' : '#ffffff',
+            fontSize: '13px',
+            fontWeight: 600,
+            textDecoration: 'none',
+            marginLeft: '2px',
+          }}
+        >
+          로그인
+        </LinkComponent>
       ) : (
         <LinkComponent
           href={urls.login}
