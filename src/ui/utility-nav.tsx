@@ -95,12 +95,15 @@ export function UtilityNav({
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
-  // 컴팩트(상단바)면 아이콘/버튼을 작게
-  const btnSize = compact ? 'h-8 w-8' : 'h-10 w-10';
-  const iconClass = compact ? 'h-[18px] w-[18px]' : 'h-5 w-5';
-  const acornSize = compact ? 18 : 20;
+  // 아이콘/버튼 크기는 T스쿨(Hub) 헤더와 항상 동일하게 고정한다.
+  // Tailwind 클래스(특히 h-[18px] 같은 임의값)는 소비 앱의 content 스캔에 없으면
+  // purge 되어 버려 lucide 기본 24px로 폴백해버리므로, 크기는 인라인 style/size prop으로 강제한다.
+  const ICON_SIZE = 20;
+  const BTN_SIZE = 40;
+  const acornSize = ICON_SIZE;
+  const buttonBoxStyle: React.CSSProperties = { width: BTN_SIZE, height: BTN_SIZE };
 
-  const buttonClass = `inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors hover:bg-black/5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 ${btnSize} ${
+  const buttonClass = `inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors hover:bg-black/5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 ${
     isScrolled ? 'text-gray-600 hover:bg-gray-100 hover:text-gray-900' : 'text-white/90 hover:bg-white/10'
   }`;
 
@@ -119,6 +122,7 @@ export function UtilityNav({
           <button
             onClick={() => setAcornOpen((v) => !v)}
             className={buttonClass}
+            style={buttonBoxStyle}
             title="내 도토리 잔액 확인"
           >
             <AcornIcon size={acornSize} color="currentColor" />
@@ -137,18 +141,18 @@ export function UtilityNav({
       )}
 
       {/* 2. 결제 — 동그라미 안 원(₩) */}
-      <LinkComponent href={urls.products} to={urls.products} className={buttonClass} title="이용권 구매">
-        <WonCircleIcon className={iconClass} />
+      <LinkComponent href={urls.products} to={urls.products} className={buttonClass} style={buttonBoxStyle} title="이용권 구매">
+        <WonCircleIcon size={ICON_SIZE} />
       </LinkComponent>
 
       {/* 3. 알림 */}
-      <LinkComponent href={urls.notifications} to={urls.notifications} className={`${buttonClass} relative`} title="알림">
-        <BellRing className={iconClass} />
+      <LinkComponent href={urls.notifications} to={urls.notifications} className={`${buttonClass} relative`} style={buttonBoxStyle} title="알림">
+        <BellRing size={ICON_SIZE} />
       </LinkComponent>
 
       {/* 4. 계정연동 — 사람 둘 겹침 */}
-      <LinkComponent href={urls.accountLinkage} to={urls.accountLinkage} className={buttonClass} title="계정연동">
-        <Users className={iconClass} />
+      <LinkComponent href={urls.accountLinkage} to={urls.accountLinkage} className={buttonClass} style={buttonBoxStyle} title="계정연동">
+        <Users size={ICON_SIZE} />
       </LinkComponent>
 
       {/* 5. 로그인 / 유저프로필 */}
