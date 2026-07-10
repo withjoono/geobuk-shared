@@ -95,13 +95,19 @@ export function UtilityNav({
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
-  // 아이콘/버튼 크기는 T스쿨(Hub) 헤더와 항상 동일하게 고정한다.
+  // 아이콘/버튼 크기는 인라인 style + size prop으로 강제한다.
   // Tailwind 클래스(특히 h-[18px] 같은 임의값)는 소비 앱의 content 스캔에 없으면
-  // purge 되어 버려 lucide 기본 24px로 폴백해버리므로, 크기는 인라인 style/size prop으로 강제한다.
-  const ICON_SIZE = 20;
-  const BTN_SIZE = 40;
+  // purge 되어 버려 lucide 기본 24px로 폴백해버리기 때문.
+  // compact(EcosystemHeader 1단 얇은 바)는 T스쿨 메인 헤더보다 한 단계 더 작고 얇게.
+  const ICON_SIZE = compact ? 16 : 20;
+  const BTN_SIZE = compact ? 28 : 40;
+  const ICON_STROKE = compact ? 1.5 : 2;
   const acornSize = ICON_SIZE;
   const buttonBoxStyle: React.CSSProperties = { width: BTN_SIZE, height: BTN_SIZE };
+  // compact 모드의 텍스트(T스쿨 라벨/사용자명/랭커 배지/로그인)는 전부 이 크기·굵기로 통일.
+  const compactTextStyle: React.CSSProperties | undefined = compact
+    ? { fontSize: 11, fontWeight: 500 }
+    : undefined;
 
   const buttonClass = `inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors hover:bg-black/5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 ${
     isScrolled ? 'text-gray-600 hover:bg-gray-100 hover:text-gray-900' : 'text-white/90 hover:bg-white/10'
@@ -142,17 +148,17 @@ export function UtilityNav({
 
       {/* 2. 결제 — 동그라미 안 원(₩) */}
       <LinkComponent href={urls.products} to={urls.products} className={buttonClass} style={buttonBoxStyle} title="이용권 구매">
-        <WonCircleIcon size={ICON_SIZE} />
+        <WonCircleIcon size={ICON_SIZE} strokeWidth={ICON_STROKE} />
       </LinkComponent>
 
       {/* 3. 알림 */}
       <LinkComponent href={urls.notifications} to={urls.notifications} className={`${buttonClass} relative`} style={buttonBoxStyle} title="알림">
-        <BellRing size={ICON_SIZE} />
+        <BellRing size={ICON_SIZE} strokeWidth={ICON_STROKE} />
       </LinkComponent>
 
       {/* 4. 계정연동 — 사람 둘 겹침 */}
       <LinkComponent href={urls.accountLinkage} to={urls.accountLinkage} className={buttonClass} style={buttonBoxStyle} title="계정연동">
-        <Users size={ICON_SIZE} />
+        <Users size={ICON_SIZE} strokeWidth={ICON_STROKE} />
       </LinkComponent>
 
       {/* 5. 로그인 / 유저프로필 */}
@@ -160,22 +166,25 @@ export function UtilityNav({
         <div className="relative ml-1" ref={userMenuRef}>
           <button
             onClick={() => setUserMenuOpen(!userMenuOpen)}
-            className={`flex items-center gap-2 px-2 ${compact ? 'py-1 h-8' : 'py-2 h-10'} rounded-md transition-colors ${
+            className={`flex items-center gap-2 px-2 ${compact ? 'py-0.5 h-7' : 'py-2 h-10'} rounded-md transition-colors ${
               isScrolled ? 'text-gray-900 hover:bg-gray-100' : 'text-white hover:bg-white/10'
             }`}
           >
             {user.profileImage ? (
-              <img src={user.profileImage} alt="profile" className={`${compact ? 'h-6 w-6' : 'h-7 w-7'} rounded-full object-cover`} />
+              <img src={user.profileImage} alt="profile" className={`${compact ? 'h-5 w-5' : 'h-7 w-7'} rounded-full object-cover`} />
             ) : (
-              <DefaultAvatar fallback={user.nickname?.[0] || '?'} size={compact ? 24 : 28} />
+              <DefaultAvatar fallback={user.nickname?.[0] || '?'} size={compact ? 20 : 28} />
             )}
-            <span className="text-sm font-medium">{user.nickname}</span>
+            <span className="text-sm font-medium" style={compactTextStyle}>{user.nickname}</span>
             {user.is_ranker && (
-              <span className="inline-flex items-center justify-center rounded px-1.5 py-0.5 text-xs font-bold text-white shadow-sm ml-1 bg-gradient-to-r from-amber-400 to-yellow-600">
+              <span
+                className="inline-flex items-center justify-center rounded px-1.5 py-0.5 text-xs font-bold text-white shadow-sm ml-1 bg-gradient-to-r from-amber-400 to-yellow-600"
+                style={compactTextStyle}
+              >
                 👑 랭커
               </span>
             )}
-            <ChevronDown className="h-4 w-4" />
+            <ChevronDown style={{ width: compact ? 12 : 16, height: compact ? 12 : 16 }} strokeWidth={ICON_STROKE} />
           </button>
 
           {userMenuOpen && (
@@ -214,12 +223,11 @@ export function UtilityNav({
             display: 'inline-flex',
             alignItems: 'center',
             padding: '0 8px',
-            height: '32px',
+            height: `${BTN_SIZE}px`,
             color: isScrolled ? '#374151' : '#ffffff',
-            fontSize: '13px',
-            fontWeight: 600,
             textDecoration: 'none',
             marginLeft: '2px',
+            ...compactTextStyle,
           }}
         >
           로그인

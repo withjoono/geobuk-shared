@@ -52,10 +52,10 @@ export function EcosystemHeader({
         <a
           href={hubUrl}
           className="flex items-center gap-1"
-          style={{ fontWeight: 500, color: '#4b5563', textDecoration: 'none' }}
+          style={{ fontSize: 11, fontWeight: 500, color: '#4b5563', textDecoration: 'none' }}
           title="T스쿨 메인으로"
         >
-          <LayoutGrid className="h-4 w-4" />
+          <LayoutGrid style={{ width: 16, height: 16 }} strokeWidth={1.5} />
           <span>{hubLabel}</span>
         </a>
         <div className="flex-1" />
