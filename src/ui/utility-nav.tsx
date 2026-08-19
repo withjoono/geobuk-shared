@@ -37,6 +37,11 @@ export interface UtilityNavProps {
   };
   // 데이터
   acornBalance?: number;
+  /**
+   * 도토리 아이콘을 브랜드 이미지로 교체할 때 쓰는 URL.
+   * 주지 않으면 기존 AcornIcon(인라인 SVG)을 그대로 그린다 — 기존 앱 무영향.
+   */
+  acornImageUrl?: string;
   // 라우팅 (외부 컴포넌트 주입)
   LinkComponent?: React.ElementType;
   // 액션
@@ -62,6 +67,7 @@ export function UtilityNav({
   isLoggedIn,
   user,
   acornBalance = 0,
+  acornImageUrl,
   LinkComponent = 'a',
   onLogout,
   isScrolled = true,
@@ -131,7 +137,18 @@ export function UtilityNav({
             style={buttonBoxStyle}
             title="내 도토리 잔액 확인"
           >
-            <AcornIcon size={acornSize} color="currentColor" />
+            {acornImageUrl ? (
+              <img
+                src={acornImageUrl}
+                alt=""
+                aria-hidden
+                width={acornSize}
+                height={acornSize}
+                style={{ width: acornSize, height: acornSize, objectFit: 'contain' }}
+              />
+            ) : (
+              <AcornIcon size={acornSize} color="currentColor" />
+            )}
           </button>
 
           {acornOpen && (
