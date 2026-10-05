@@ -8,6 +8,11 @@
  * - 인스타 아이콘은 호스팅 에셋이 없어 lucide-react 사용 (소비 앱이 lucide-react 제공)
  *
  * 3단 레이아웃: 좌(로고+T스쿨) · 중(사업자정보+정책링크) · 우(네이버카페·유튜브·인스타)
+ *
+ * 표기 주의:
+ * - 저작권 연도는 하드코딩하지 말 것. 해마다 손대야 하고, 미래 연도가 박히면 신뢰를 깎는다.
+ * - 연락처는 대표번호만 노출한다. 개인 휴대폰 번호는 전 사이트 푸터에 박혀 스팸에 수집된다.
+ *   전자상거래법상 표시 의무는 연락 가능한 전화번호 하나로 충족된다.
  */
 
 import React from 'react';
@@ -55,7 +60,7 @@ export const Footer = () => {
           <div className="flex flex-col gap-3 text-center">
             <div className="flex flex-col gap-1 text-xs text-foreground/70 sm:text-sm">
               <span>사업체명 (주)거북스쿨 | 대표 강준호</span>
-              <span>사업자등록번호 772-87-02782 | 연락처 042-484-3356 / 010-2518-7139</span>
+              <span>사업자등록번호 772-87-02782 | 대표전화 042-484-3356</span>
               <span>서울시 성북구 화랑로 211 성북구 기술창업센터 105호</span>
             </div>
             <div className="flex flex-wrap justify-center gap-x-4 gap-y-1 pt-1 text-sm font-medium">
@@ -124,7 +129,7 @@ export const Footer = () => {
 
         {/* 저작권 */}
         <div className="mt-4 border-t border-foreground/10 pt-3 text-center text-xs text-foreground/50">
-          © 2027 (주)거북스쿨. All rights reserved.
+          © {new Date().getFullYear()} (주)거북스쿨. All rights reserved.
         </div>
       </div>
     </footer>
