@@ -4,3 +4,5 @@
 export * from './token-manager.js';
 export * from './api-client.js';
 export * from './sso.js';
+export * from './hub-session-sync.js';
+export { useHubSessionSync, useHubSyncDirtyGuard } from './use-hub-session-sync.js';
